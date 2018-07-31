@@ -7,7 +7,7 @@ var mysql = require('mysql')
  * This middleware provides a consistent API 
  * for MySQL connections during request/response life cycle
  */ 
-var myConnection  = require('express-myconnection')
+var myQuery  = require('express-myconnection')
 /**
  * Store database credentials in a separate config.js file
  * Load the file/module and its values
@@ -26,7 +26,7 @@ var dbOptions = {
  * pool: Creates pool of connections. Connection is auto release when response ends.
  * request: Creates new connection per new request. Connection is auto close when response ends.
  */ 
-app.use(myConnection(mysql, dbOptions, 'pool'))
+app.use(myQuery(mysql, dbOptions, 'pool'))
 
 /**
  * setting up the templating view engine

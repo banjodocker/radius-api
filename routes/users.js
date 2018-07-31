@@ -4,7 +4,8 @@ var app = express()
 // SHOW LIST OF USERS
 app.get('/', function(req, res, next) {
 	req.getConnection(function(error, conn) {
-		conn.query('SELECT * FROM users ORDER BY id DESC',function(err, rows, fields) {
+		conn.query('SELECT * FROM radcheck ORDER BY id DESC',function(err, rows, fields) {
+			// Useful to see the row packet console.log(rows)
 			//if(err) throw err
 			if (err) {
 				req.flash('error', err)
@@ -28,20 +29,19 @@ app.get('/add', function(req, res, next){
 	// render to views/user/add.ejs
 	res.render('user/add', {
 		title: 'Add New User',
-		name: '',
-		age: '',
-		email: ''		
+		username: '',
+		password: ''
 	})
 })
 
 // ADD NEW USER POST ACTION
 app.post('/add', function(req, res, next){	
-	req.assert('name', 'Name is required').notEmpty()           //Validate name
-	req.assert('age', 'Age is required').notEmpty()             //Validate age
-    req.assert('email', 'A valid email is required').isEmail()  //Validate email
+
+    req.assert('username', 'Username is required').notEmpty()           //Validate name
+    req.assert('password', 'Password is required').notEmpty()             //Validate age
 
     var errors = req.validationErrors()
-    
+
     if( !errors ) {   //No errors were found.  Passed Validation!
 		
 		/********************************************
@@ -54,23 +54,24 @@ app.post('/add', function(req, res, next){
 		req.sanitize('username').trim(); // returns 'a user'
 		********************************************/
 		var user = {
-			name: req.sanitize('name').escape().trim(),
-			age: req.sanitize('age').escape().trim(),
-			email: req.sanitize('email').escape().trim()
+			username: req.sanitize('username').escape().trim(),
+			password: req.sanitize('password').escape().trim()
 		}
+
 		
 		req.getConnection(function(error, conn) {
-			conn.query('INSERT INTO users SET ?', user, function(err, result) {
+			sql = `INSERT INTO radcheck (username,attribute,op,value ) VALUES ('${user.username}','SSHA2-512-Password', ':=', SHA2('${user.password}',512))`
+			conn.query(sql, user, function(err,result) {
 				//if(err) throw err
 				if (err) {
+					console.log(err)
 					req.flash('error', err)
 					
 					// render to views/user/add.ejs
 					res.render('user/add', {
 						title: 'Add New User',
-						name: user.name,
-						age: user.age,
-						email: user.email					
+						username: user.username,
+						password: user.password
 					})
 				} else {				
 					req.flash('success', 'Data added successfully!')
@@ -78,9 +79,8 @@ app.post('/add', function(req, res, next){
 					// render to views/user/add.ejs
 					res.render('user/add', {
 						title: 'Add New User',
-						name: '',
-						age: '',
-						email: ''					
+						username: '',
+						password: ''					
 					})
 				}
 			})
@@ -99,44 +99,43 @@ app.post('/add', function(req, res, next){
 		 */ 
         res.render('user/add', { 
             title: 'Add New User',
-            name: req.body.name,
-            age: req.body.age,
-            email: req.body.email
+            username: req.body.username,
+            username: req.body.password
         })
     }
 })
 
 // SHOW EDIT USER FORM
 app.get('/edit/(:id)', function(req, res, next){
-	req.getConnection(function(error, conn) {
-		conn.query('SELECT * FROM users WHERE id = ' + req.params.id, function(err, rows, fields) {
-			if(err) throw err
-			
-			// if user not found
-			if (rows.length <= 0) {
-				req.flash('error', 'User not found with id = ' + req.params.id)
-				res.redirect('/users')
-			}
-			else { // if user found
-				// render to views/user/edit.ejs template file
-				res.render('user/edit', {
-					title: 'Edit User', 
-					//data: rows[0],
-					id: rows[0].id,
-					name: rows[0].name,
-					age: rows[0].age,
-					email: rows[0].email					
-				})
-			}			
-		})
-	})
+        req.getConnection(function(error, conn) {
+                conn.query('SELECT * FROM radcheck WHERE id = ' + req.params.id, function(err, rows, fields) {
+                        if(err) throw err
+
+                        // if user not found
+                        if (rows.length <= 0) {
+                                req.flash('error', 'User not found with id = ' + req.params.id)
+                                res.redirect('/users')
+                        }
+                        else { // if user found
+                                // render to views/user/edit.ejs template file
+                                res.render('user/edit', {
+                                        title: 'Edit User',
+                                        //data: rows[0],
+                                        id: rows[0].id,
+                                        username: rows[0].username,
+                                        password: rows[0].value
+                                })
+                        }
+                })
+        })
 })
+
+
 
 // EDIT USER POST ACTION
 app.put('/edit/(:id)', function(req, res, next) {
-	req.assert('name', 'Name is required').notEmpty()           //Validate name
-	req.assert('age', 'Age is required').notEmpty()             //Validate age
-    req.assert('email', 'A valid email is required').isEmail()  //Validate email
+	req.assert('username', 'Username is required').notEmpty()           //Validate name
+	req.assert('password', 'Password is required').notEmpty()             //Validate age
 
     var errors = req.validationErrors()
     
@@ -148,28 +147,26 @@ app.put('/edit/(:id)', function(req, res, next) {
 		req.body.comment = 'a <span>comment</span>';
 		req.body.username = '   a user    ';
 
-		req.sanitize('comment').escape(); // returns 'a &lt;span&gt;comment&lt;/span&gt;'
 		req.sanitize('username').trim(); // returns 'a user'
 		********************************************/
 		var user = {
-			name: req.sanitize('name').escape().trim(),
-			age: req.sanitize('age').escape().trim(),
-			email: req.sanitize('email').escape().trim()
+			username: req.sanitize('username').escape().trim(),
+			password: req.sanitize('password').escape().trim()
 		}
 		
 		req.getConnection(function(error, conn) {
-			conn.query('UPDATE users SET ? WHERE id = ' + req.params.id, user, function(err, result) {
+			conn.query('UPDATE radcheck SET value = SHA2(' + user.password + ', 512) WHERE id = ' + req.params.id, function(err, result) {
 				//if(err) throw err
 				if (err) {
 					req.flash('error', err)
+					console.log(user.password + 'below')
 					
 					// render to views/user/add.ejs
 					res.render('user/edit', {
 						title: 'Edit User',
 						id: req.params.id,
-						name: req.body.name,
-						age: req.body.age,
-						email: req.body.email
+						username: req.body.username,
+						password: req.body.password
 					})
 				} else {
 					req.flash('success', 'Data updated successfully!')
@@ -177,10 +174,9 @@ app.put('/edit/(:id)', function(req, res, next) {
 					// render to views/user/add.ejs
 					res.render('user/edit', {
 						title: 'Edit User',
-						id: req.params.id,
-						name: req.body.name,
-						age: req.body.age,
-						email: req.body.email
+						      id: req.params.id,
+						username: req.body.username,
+						password: req.body.password
 					})
 				}
 			})
@@ -199,32 +195,28 @@ app.put('/edit/(:id)', function(req, res, next) {
 		 */ 
         res.render('user/edit', { 
             title: 'Edit User',            
-			id: req.params.id, 
-			name: req.body.name,
-			age: req.body.age,
-			email: req.body.email
+			id: req.body.id,
+			username: req.body.username,
+			password: req.body.password
         })
     }
 })
 
 // DELETE USER
 app.delete('/delete/(:id)', function(req, res, next) {
-	var user = { id: req.params.id }
-	
-	req.getConnection(function(error, conn) {
-		conn.query('DELETE FROM users WHERE id = ' + req.params.id, user, function(err, result) {
-			//if(err) throw err
-			if (err) {
-				req.flash('error', err)
-				// redirect to users list page
-				res.redirect('/users')
-			} else {
-				req.flash('success', 'User deleted successfully! id = ' + req.params.id)
-				// redirect to users list page
-				res.redirect('/users')
-			}
-		})
-	})
+	console.log('HIT')
+        var user = { id: req.params.id }
+        req.getConnection(function(error, conn) {
+                conn.query('DELETE FROM radcheck WHERE id =' + req.params.id, function(err, result) {
+                         if (err) {
+                                 req.flash('error', err)
+                                 res.redirect('/users')
+                        } else {
+                                req.flash('success', 'User deleted successfully! ' + user.username )
+                                res.redirect('/users')
+                         }
+                })
+        })
 })
 
 module.exports = app

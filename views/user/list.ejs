@@ -14,8 +14,9 @@ including header content which is common for all pages
 <table width='80%' border=0>
 
 	<tr style='text-align:left; background-color:#CCC'>
-		<th>Name</th>
-		<th>Age</th>
+		<th>Username</th>
+		<th>Fullname</th>
+		<th>Department</th>
 		<th>Email</th>
 		<th>Action</th>
 	</tr>
@@ -30,14 +31,15 @@ including header content which is common for all pages
 	<% if (data) { %>
 	<% data.forEach(function(user){ %>
 		<tr>
-			<td><%= user.name %></td>
-			<td><%= user.age %></td>
+			<td><%= user.username %></td>
+			<td><%= user.fullname %></td>
+			<td><%= user.department %></td>
 			<td><%= user.email %></td>
 			<td>
 				<div style="float:left">
 					<a href='/users/edit/<%= user.id %>'>Edit</a> &nbsp;							
 					<form method="post" action="/users/delete/<%= user.id %>" style="float:right">
-						<input type="submit" name="delete" value='Delete' onClick="return confirm('Are you sure you want to delete?')" />
+						<input type="submit" name="delete" value='Delete' onClick="return confirm('Are you sure you want to delete? <%= user.ID %>' )" />
 						<input type="hidden" name="_method" value="DELETE" />
 					</form>
 				</div>
