@@ -2,17 +2,6 @@
 including header content which is common for all pages
 -->
 <%- include ../layouts/header.ejs %>	
-		
-<% if (messages.error) { %>
-	<p style="color:red"><%- messages.error %></p>
-<% } %>
-
-<% if (messages.success) { %>
-	<p style="color:green"><%- messages.success %></p>
-<% } %>
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -27,7 +16,7 @@ including header content which is common for all pages
 <body>
 
 <div class="container">
-  <h2>Edit Username</h2>
+  <h2>Enter New Username</h2>
 <% if (messages.error) { %>
         <p class="bg-danger"><%- messages.error %></p>
 <% } %>
@@ -36,26 +25,25 @@ including header content which is common for all pages
         <p class="bg-success"><%- messages.success %></p>
 <% } %>
  <p>This is a basic form for adding a new user for Radius</p>
-  <form class="form-horizontal" action="/users/edit<%= id %>" method="post" name="form1">
+  <form class="form-horizontal" action="/users/add" method="post" name="form1">
     <div class="form-group">
       <label class="control-label col-sm-2" for="username">Username:</label>
-      <div class="col-sm-3">
+      <div class="col-sm-3"> 
         <input type="text" class="form-control" name="username" value="<%= username %>" >
        </div>
     </div>
 
     <div class="form-group">
       <label class="control-label col-sm-2" for="password">Password:</label>
-      <div class="col-sm-3">
+      <div class="col-sm-3"> 
         <input type="password" class="form-control" name="password" id="password" value="<%= password %>" >
       </div>
     </div>
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
-       <input type="submit" class="btn btn-primary btn-md" name="Submit" value="Edit" />
+       <input type="submit" class="btn btn-primary btn-md" name="Submit" value="Add" />
       </div>
     </div>
-   <input type="hidden" name="_method" value="PUT" />
   </form>
 </div>
 

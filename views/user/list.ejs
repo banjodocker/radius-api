@@ -4,23 +4,36 @@ including header content which is common for all pages
 <%- include ../layouts/header.ejs %>
 
 <% if (messages.error) { %>
-	<p style="color:red"><%- messages.error %></p>
+	<p class="bg-danger"><%- messages.error %></p>
 <% } %>
 
 <% if (messages.success) { %>
-	<p style="color:green"><%- messages.success %></p>
+        <p class="bg-success"><%- messages.success %></p>
 <% } %>	
 
-<table width='80%' border=0>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
 
-	<tr style='text-align:left; background-color:#CCC'>
-		<th>Username</th>
-		<th>Fullname</th>
-		<th>Department</th>
-		<th>Email</th>
-		<th>Action</th>
-	</tr>
-	
+<table class="table table-hover">
+	<thread>
+        	</tr>
+                <th>Username</th>
+                <th>Fullname</th>
+                <th>Department</th>
+                <th>Email</th>
+                <th>Action</th>
+        	</tr>
+        </thread>
+
 	<!--
 		Using FOREACH LOOP for the users array
 		
@@ -39,15 +52,15 @@ including header content which is common for all pages
 				<div style="float:left">
 					<a href='/users/edit/<%= user.id %>'>Edit</a> &nbsp;							
 					<form method="post" action="/users/delete/<%= user.id %>" style="float:right">
-						<input type="submit" name="delete" value='Delete' onClick="return confirm('Are you sure you want to delete? <%= user.ID %>' )" />
-						<input type="hidden" name="_method" value="DELETE" />
+						<input type="submit" name="delete" value='Delete' onClick="return confirm('Are you sure you want to delete? <%= user.id %>' )" />
+						<input type="hidden" class="btn btn-info" name="_method" value="DELETE" />
 					</form>
 				</div>
 			</td>
 		</tr>
 	<% }) %>
 	<% } %>
-
+        </tbody>
 </table>
 
 <!--

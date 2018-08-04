@@ -64,7 +64,7 @@ app.post('/add', function(req, res, next){
 			conn.query(sql, user, function(err,result) {
 				//if(err) throw err
 				if (err) {
-					console.log(err)
+					console.log('OOPS-1: ' + err)
 					req.flash('error', err)
 					
 					// render to views/user/add.ejs
