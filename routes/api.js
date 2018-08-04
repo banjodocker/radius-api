@@ -1,3 +1,4 @@
+
 var express = require('express')
 var api = express.Router()
 
@@ -71,10 +72,9 @@ api.put('/updatepass', function(req, res, next) {
 
         req.getConnection(function(error,conn) {
                 conn.query('SELECT * FROM radcheck WHERE username = ?', username, function(err, rows, fields, result) {
-		console.log(rows)
 		//yeap we found the user therefore we can proceed
 		if(rows.length) {
-			conn.query('UPDATE radcheck SET value = SHA2(?, 512) WHERE username = ? ', [username, password], function(err, rows, result) {
+			conn.query("UPDATE radcheck SET value = SHA2(?, 512) WHERE username = ? ", [password, username], function(err, rows, result) {
 			if(err) throw err
 			res.send(JSON.stringify(
                                 { 'status': 200,
