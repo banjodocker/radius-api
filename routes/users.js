@@ -6,7 +6,7 @@ app.get('/', function(req, res, next) {
 	req.getConnection(function(error, conn) {
 		conn.query('SELECT * FROM radcheck ORDER BY id DESC',function(err, rows, fields) {
 			// Useful to see the row packet console.log(rows)
-			//if(err) throw err
+			if(err) throw err
 			if (err) {
 				req.flash('error', err)
 				res.render('user/list', {
@@ -60,7 +60,7 @@ app.post('/add', function(req, res, next){
 
 		
 		req.getConnection(function(error, conn) {
-			sql = `INSERT INTO radcheck (username,attribute,op,value ) VALUES ('${user.username}','SSHA2-512-Password', ':=', SHA2('${user.password}',512))`
+			sql = `INSERT INTO radcheck (username,attribute,op,value ) VALUES ('${user.username}','SHA2-512-Password', ':=', SHA2('${user.password}',512))`
 			conn.query(sql, user, function(err,result) {
 				//if(err) throw err
 				if (err) {
@@ -155,11 +155,11 @@ app.put('/edit/(:id)', function(req, res, next) {
 		}
 		
 		req.getConnection(function(error, conn) {
-			conn.query('UPDATE radcheck SET value = SHA2(' + user.password + ', 512) WHERE id = ' + req.params.id, function(err, result) {
+			conn.query('UPDATE radcheck SET value = SHA2(?, 512) WHERE id = ?', [ user.password, req.params.id ], function(err, result) {
 				//if(err) throw err
 				if (err) {
 					req.flash('error', err)
-					console.log(user.password + 'below')
+					console.log(err)
 					
 					// render to views/user/add.ejs
 					res.render('user/edit', {
