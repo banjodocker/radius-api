@@ -47,20 +47,23 @@ app.post('/add', function(req, res, next){
 
 		
 		req.getConnection(function(error, conn) {
-			conn.query("INSERT INTO radhuntgroup (group_name, nas_ip, nas_port) VALUES ( ?, ?, ? )", [group_name, nas_ip, nas_port], function(err,result) {
+			conn.query("INSERT INTO radhuntgroup (groupname, nasipaddress, nasportid) VALUES ( ?, ?, ? )", [huntgroup.group_name, huntgroup.nas_ip, huntgroup.nas_port], function(err,result) {
 				//if(err) throw err
 				if (err) {
 					console.log('OOPS-1: ' + err)
 					req.flash('error', err)
 					
-					res.render('user/add', {
+					res.render('huntgroups/add', {
 						group_name: huntgroup.group_name,
 						nas_ip: huntgroup.nas_ip,
 						nas_port: huntgroup.nas_port
 					})
 				} else {				
 					req.flash('success', 'Data added successfully!')
-					res.render('user/add')
+					res.render('huntgroups/add', {
+						group_name: '',
+						nas_ip: '',
+						nas_port: '' })
 				}
 			})
 			
@@ -73,14 +76,10 @@ app.post('/add', function(req, res, next){
 		})				
 		req.flash('error', error_msg)		
 		
-		/**
-		 * Using req.body.name 
-		 * because req.param('name') is deprecated
-		 */ 
-        res.render('user/add', { 
-            title: 'Add New User',
-            username: req.body.username,
-            username: req.body.password
+        	res.render('user/add', { 
+        	   group_name: '',
+              	       nas_ip: '',
+                     nas_port: ''
         })
     }
 })
