@@ -89,22 +89,20 @@ app.post('/add', function(req, res, next){
 app.get('/edit/(:id)', function(req, res, next){
         req.getConnection(function(error, conn) {
                 conn.query('SELECT * FROM radhuntgroup WHERE id = ' + req.params.id, function(err, rows, fields) {
-                        if(err) throw err
 
                         // if user not found
                         if (rows.length <= 0) {
-                                req.flash('error', 'User not found with id = ' + req.params.id)
-                                res.redirect('/users')
+                                req.flash('error', 'Huntgroup not found with id = ' + req.params.id)
+                                res.redirect('huntgroups/edit')
                         }
                         else { // if user found
                                 // render to views/user/edit.ejs template file
-                                res.render('user/edit', {
-                                        title: 'Edit User',
-                                        //data: rows[0],
-                                        id: rows[0].id,
-                                        username: rows[0].username,
-                                        password: rows[0].value
-                                })
+                                res.render('huntgroups/edit', {
+					id: rows[0].id,
+				   group_name: rows[0].groupname,
+				   nas_ip: rows[0].nasipaddress,
+				   nas_port: rows[0].nasportid
+				})
                         }
                 })
         })
