@@ -1,0 +1,67 @@
+<!--
+including header content which is common for all pages
+-->
+<%- include ../layouts/header.ejs %>
+
+<% if (messages.error) { %>
+	<p class="bg-danger"><%- messages.error %></p>
+<% } %>
+
+<% if (messages.success) { %>
+        <p class="bg-success"><%- messages.success %></p>
+<% } %>	
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Huntgroup List</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<table class="table table-hover">
+	<thread>
+        	</tr>
+                <th>Group name</th>
+                <th>NAS IP Address</th>
+                <th>NAS Port ID</th>
+                <th>Action</th>
+        	</tr>
+        </thread>
+
+	<!--
+		Using FOREACH LOOP for the users array
+		
+		myArray.forEach(function(el, index) {
+			// el - current element, i - index
+		});
+	-->
+	<% if (data) { %>
+	<% data.forEach(function(huntgroups){ %>
+		<tr>
+			<td><%= huntgroups.groupname %></td>
+			<td><%= huntgroups.nasipaddress %></td>
+			<td><%= huntgroups.nasportid %></td>
+			<td>
+				<div style="float:left">
+					<a href='/huntgroups/edit/<%= huntgroups.id %>'>Edit</a> &nbsp;							
+					<form method="post" action="/huntgroups/delete/<%= huntgroups.id %>" style="float:right">
+						<input type="submit" name="delete" value='Delete' onClick="return confirm('Are you sure you want to delete? <%= huntgroups.groupname %>' )" />
+						<input type="hidden" class="btn btn-info" name="_method" value="DELETE" />
+					</form>
+				</div>
+			</td>
+		</tr>
+	<% }) %>
+	<% } %>
+        </tbody>
+</table>
+
+<!--
+including footer content which is common for all pages
+-->
+<%- include ../layouts/footer.ejs %>

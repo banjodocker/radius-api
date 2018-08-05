@@ -1,0 +1,65 @@
+<!--
+including header content which is common for all pages
+-->
+<%- include ../layouts/header.ejs %>	
+		
+<% if (messages.error) { %>
+	<p style="color:red"><%- messages.error %></p>
+<% } %>
+
+<% if (messages.success) { %>
+	<p style="color:green"><%- messages.success %></p>
+<% } %>
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <h2>Edit Username</h2>
+<% if (messages.error) { %>
+        <p class="bg-danger"><%- messages.error %></p>
+<% } %>
+
+<% if (messages.success) { %>
+        <p class="bg-success"><%- messages.success %></p>
+<% } %>
+ <p>This is a basic form for adding a new user for Radius</p>
+  <form class="form-horizontal" action="/users/edit<%= id %>" method="post" name="form1">
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="username">Username:</label>
+      <div class="col-sm-3">
+        <input type="text" class="form-control" name="username" value="<%= username %>" >
+       </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="password">Password:</label>
+      <div class="col-sm-3">
+        <input type="password" class="form-control" name="password" id="password" value="<%= password %>" >
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+       <input type="submit" class="btn btn-primary btn-md" name="Submit" value="Edit" />
+      </div>
+    </div>
+   <input type="hidden" name="_method" value="PUT" />
+  </form>
+</div>
+
+<!--
+including footer content which is common for all pages
+-->
+<%- include ../layouts/footer.ejs %>

@@ -1,0 +1,61 @@
+<!--
+including header content which is common for all pages
+-->
+<%- include ../layouts/header.ejs %>	
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <h2>Enter New Huntgroup</h2>
+<% if (messages.error) { %>
+        <p class="bg-danger"><%- messages.error %></p>
+<% } %>
+
+<% if (messages.success) { %>
+        <p class="bg-success"><%- messages.success %></p>
+<% } %>
+ <p>Add a New Network Element in the Huntgroup</p>
+  <form class="form-horizontal" action="/huntgroups/add" method="post" name="form1">
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="group_name">Group Name:</label>
+      <div class="col-sm-3"> 
+        <input type="text" class="form-control" name="group_name" value="<%= group_name %>" >
+       </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="nas_ip">NAS IP:</label>
+      <div class="col-sm-3">
+        <input type="text" class="form-control" name="nas_ip" value="<%= nas_ip %>" >
+       </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="nas_port">NAS Port:</label>
+      <div class="col-sm-3">
+        <input type="text" class="form-control" name="nas_port" value="<%= nas_port %>" >
+       </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+       <input type="submit" class="btn btn-primary btn-md" name="Submit" value="Add" />
+      </div>
+    </div>
+  </form>
+</div>
+
+<!--
+including footer content which is common for all pages
+-->
+<%- include ../layouts/footer.ejs %>
