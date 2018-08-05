@@ -47,7 +47,7 @@ app.post('/add', function(req, res, next){
 
 		
 		req.getConnection(function(error, conn) {
-			conn.query("INSERT INTO radhuntgroup (group_name, nas_ip, nas_port) VALUES ( ?, ?, ? )"), [group_name, nas_ip, nas_port], function(err,result) {
+			conn.query("INSERT INTO radhuntgroup (group_name, nas_ip, nas_port) VALUES ( ?, ?, ? )", [group_name, nas_ip, nas_port], function(err,result) {
 				//if(err) throw err
 				if (err) {
 					console.log('OOPS-1: ' + err)
@@ -63,6 +63,7 @@ app.post('/add', function(req, res, next){
 					res.render('user/add')
 				}
 			})
+			
 		})
 	}
 	else {   //Display errors to user
