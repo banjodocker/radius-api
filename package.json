@@ -1,8 +1,8 @@
 {
-  "name": "crud-mysql",
+  "name": "radius-api",
   "version": "1.0.0",
-  "description": "Node.js CRUD application using MySQL",
-  "main": "index.js",
+  "description": "A Simple FreeRadius GUI with CRUD and RestAPI",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,7 +11,7 @@
     "crud",
     "mysql"
   ],
-  "author": "Mukesh Chapagain",
+  "author": "Mariel Donila",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.17.2",

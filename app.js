@@ -58,6 +58,6 @@ app.use('/users', users)
 app.use('/huntgroups', huntgroups)
 app.use('/v1/users', api)
 
-app.listen(3000, function(){
-	console.log('Server running at port 3000: http://127.0.0.1:3000')
+app.listen(config.server.port, function(){
+	console.log('Server running at port ' + config.server.port + ': http://' + config.server.host + ':' + config.server.port )
 })

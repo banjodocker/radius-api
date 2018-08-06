@@ -114,13 +114,15 @@ app.get('/edit/(:id)', function(req, res, next){
                         // if user not found
                         if (rows.length <= 0) {
                                 req.flash('error', 'User not found with id = ' + req.params.id)
-                                res.redirect('/users')
+                                res.redirect('user', {
+					id: '',
+				    username: '', 
+				    password: '' })
                         }
                         else { // if user found
                                 // render to views/user/edit.ejs template file
                                 res.render('user/edit', {
                                         title: 'Edit User',
-                                        //data: rows[0],
                                         id: rows[0].id,
                                         username: rows[0].username,
                                         password: rows[0].value
@@ -210,10 +212,10 @@ app.delete('/delete/(:id)', function(req, res, next) {
                 conn.query('DELETE FROM radcheck WHERE id =' + req.params.id, function(err, result) {
                          if (err) {
                                  req.flash('error', err)
-                                 res.redirect('/users')
+                                 res.redirect('/user')
                         } else {
                                 req.flash('success', 'User deleted successfully! ' + user.username )
-                                res.redirect('/users')
+                                res.redirect('/user')
                          }
                 })
         })
